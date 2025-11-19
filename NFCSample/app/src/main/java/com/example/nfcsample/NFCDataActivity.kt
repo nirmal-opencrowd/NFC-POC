@@ -44,6 +44,7 @@ class NFCDataActivity : ComponentActivity() {
                 .setPrompt("Scan a QR Code")
                 .setBeepEnabled(true)
                 .setOrientationLocked(true)
+                .setCaptureActivity(PortraitCaptureActivity::class.java)
                 .initiateScan()
         }
 
