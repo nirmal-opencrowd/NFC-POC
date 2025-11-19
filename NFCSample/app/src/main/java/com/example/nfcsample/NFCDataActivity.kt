@@ -68,12 +68,13 @@ class NFCDataActivity : ComponentActivity() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
         if (nfcAdapter == null) {
-            Toast.makeText(this, "NFC not available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "NFC not supported in this device.", Toast.LENGTH_LONG).show()
             return
         }
 
         if (!nfcAdapter!!.isEnabled) {
-            Log.e("onCreate", "Please enable NFC in settings")
+            Log.e("onCreate", "Please enable NFC from Settings.")
+            Toast.makeText(this, "Please enable NFC from Settings.", Toast.LENGTH_LONG).show()
         }
 
         // Check if HCE is supported
@@ -218,6 +219,11 @@ class NFCDataActivity : ComponentActivity() {
             intentFilters,
             null
         )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        nfcAdapter?.disableForegroundDispatch(this)
     }
 
     @SuppressLint("ClickableViewAccessibility")
