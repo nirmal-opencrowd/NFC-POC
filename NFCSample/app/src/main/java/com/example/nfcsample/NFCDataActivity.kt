@@ -36,10 +36,11 @@ class NFCDataActivity : ComponentActivity() {
         setContentView(R.layout.activity_nfc_data)
         enableEdgeToEdge()
 
-        val uriEditText = findViewById<EditText>(R.id.uriStringEditText)
-        val sendBtn = findViewById<Button>(R.id.sendToNFCBtn)
+        val nfcDataEditText = findViewById<EditText>(R.id.nfcDataEditText)
+        val writeNFCBtn = findViewById<Button>(R.id.writeDataToNFCTagBtn)
+        val sendNFCBtn = findViewById<Button>(R.id.sendDataViaNFCBtn)
 
-        uriEditText.onRightDrawableClicked {
+        nfcDataEditText.onRightDrawableClicked {
             IntentIntegrator(this)
                 .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
                 .setPrompt("Scan a QR Code")
@@ -48,15 +49,22 @@ class NFCDataActivity : ComponentActivity() {
                 .initiateScan()
         }
 
-        sendBtn.setOnClickListener {
-            val dataToSendUrl = uriEditText.text.toString().trim()
+        writeNFCBtn.setOnClickListener {
+            val dataToSendUrl = getNfcDataFromInput()
             if (dataToSendUrl.isNotBlank()) {
                 Log.d("Payment URL", dataToSendUrl)
-
                 onNewURLCreated(dataToSendUrl)
-                prepareDataForTransfer()
-
                 Toast.makeText(this, "Please hold the phone near the NFC Tag", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Please enter or scan data first", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        sendNFCBtn.setOnClickListener {
+            val dataToSendUrl = getNfcDataFromInput()
+            if (dataToSendUrl.isNotBlank()) {
+                Log.d("Payment URL", dataToSendUrl)
+                prepareDataForTransfer(dataToSendUrl)
             } else {
                 Toast.makeText(this, "Please enter or scan data first", Toast.LENGTH_LONG).show()
             }
@@ -91,6 +99,11 @@ class NFCDataActivity : ComponentActivity() {
         } else {
             Log.d("cardEmulation", "HCE not supported on this device")
         }
+    }
+
+    private fun getNfcDataFromInput(): String {
+        val nfcDataEditText = findViewById<EditText>(R.id.nfcDataEditText)
+        return nfcDataEditText.text.toString().trim()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -202,11 +215,8 @@ class NFCDataActivity : ComponentActivity() {
         pendingURL = url
     }
 
-    private fun prepareDataForTransfer() {
+    private fun prepareDataForTransfer(dataToSendUrl: String) {
         // Prepare merchant data
-        val uriEditText = findViewById<EditText>(R.id.uriStringEditText)
-        val dataToSendUrl = uriEditText.text.toString().trim()
-
         val data = PaymentHostApduService.MerchantData(
             uuid = dataToSendUrl
         )
@@ -220,8 +230,8 @@ class NFCDataActivity : ComponentActivity() {
         val result: IntentResult =
             IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result.contents != null) {
-            val uriEditText = findViewById<EditText>(R.id.uriStringEditText)
-            uriEditText.setText(result.contents)
+            val nfcDataEditText = findViewById<EditText>(R.id.nfcDataEditText)
+            nfcDataEditText.setText(result.contents)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
