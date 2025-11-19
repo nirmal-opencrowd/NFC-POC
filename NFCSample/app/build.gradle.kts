@@ -60,4 +60,6 @@ dependencies {
     //Barcode scanner
     implementation(libs.zxing.android.embedded)
     implementation (libs.zxing.core)
+
+    implementation(libs.constraintlayout)
 }

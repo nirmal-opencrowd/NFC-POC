@@ -132,7 +132,8 @@ class NFCDataActivity : ComponentActivity() {
 
         } catch (e: TagLostException) {
             Log.e("Error writeUrlToTag Tag Lost", e.message ?: e.toString())
-            Toast.makeText(this, "Tag lost during write, please try again", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Tag lost during write, please try again", Toast.LENGTH_LONG)
+                .show()
         } catch (e: FormatException) {
             Log.e("Error writeUrlToTag Format", e.message ?: e.toString())
             Toast.makeText(this, "Tag format not supported or corrupted", Toast.LENGTH_LONG).show()
@@ -155,18 +156,22 @@ class NFCDataActivity : ComponentActivity() {
                 prefix = 0x01
                 urlBytes = url.substring(11).toByteArray(Charset.forName("US-ASCII"))
             }
+
             url.startsWith("https://www.") -> {
                 prefix = 0x02
                 urlBytes = url.substring(12).toByteArray(Charset.forName("US-ASCII"))
             }
+
             url.startsWith("http://") -> {
                 prefix = 0x03
                 urlBytes = url.substring(7).toByteArray(Charset.forName("US-ASCII"))
             }
+
             url.startsWith("https://") -> {
                 prefix = 0x04
                 urlBytes = url.substring(8).toByteArray(Charset.forName("US-ASCII"))
             }
+
             else -> {
                 prefix = 0x00
                 urlBytes = url.toByteArray(Charset.forName("US-ASCII"))
@@ -190,7 +195,8 @@ class NFCDataActivity : ComponentActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result: IntentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        val result: IntentResult =
+            IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result.contents != null) {
             val uriEditText = findViewById<EditText>(R.id.uriStringEditText)
             uriEditText.setText(result.contents)

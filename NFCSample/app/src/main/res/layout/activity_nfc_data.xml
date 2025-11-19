@@ -12,6 +12,17 @@
         android:layout_margin="20dp"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="Scan &amp; Write NFC"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <EditText
             android:id="@+id/uriStringEditText"
             android:layout_width="match_parent"
@@ -33,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="56dp"
             android:layout_gravity="center"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="24dp"
             android:backgroundTint="#2196F3"
             android:paddingHorizontal="20dp"
