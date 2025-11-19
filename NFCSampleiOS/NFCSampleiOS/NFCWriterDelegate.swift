@@ -134,8 +134,9 @@ final class NFCWriterDelegate: NSObject, NFCNDEFReaderSessionDelegate {
                         session.invalidate()
                     } else {
                         self.onSuccess?()
-                        session.alertMessage = "Tag updated successfully."
+                        session.alertMessage = "✅ Successfully written!"
                         session.invalidate()
+                        self.onSuccess?()
                     }
                 }
             }

@@ -22,13 +22,34 @@ struct QRAndNFCView: View {
                 .fontWeight(.bold)
                 .padding(.top)
             
-            TextField("Scanned data appears here...",
-                      text: $viewModel.scannedText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-
-            // Scan QR Button
             
+            ZStack(alignment: .topLeading) {
+
+                if viewModel.scannedText.isEmpty {
+                    Text("Scanned data appears here…")
+                        .foregroundColor(.gray)
+                        .padding(.top, 20)
+                        .padding(.leading, 20)
+                        .allowsHitTesting(false)
+                }
+
+                TextEditor(text: $viewModel.scannedText)
+                    .padding(12)
+                    .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    UIApplication.shared.endEditing()
+                                }
+                            }
+                        }
+            }
+            .frame(height: 100)
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(12)
+            .padding(.horizontal, 20)
+
+
             // MARK: - QR Scan Button
             Button(action: {
                 if cameraPermission.isCameraAllowed {
@@ -58,25 +79,11 @@ struct QRAndNFCView: View {
                     .padding(.horizontal)
             }
             
-            
-            
-//            Button(action: { showScanner = true }) {
-//                HStack {
-//                    Image(systemName: "qrcode.viewfinder")
-//                    Text("Scan QR Code")
-//                }
-//                .foregroundColor(.white)
-//                .padding()
-//                .frame(maxWidth: .infinity)
-//                .background(Color.blue)
-//                .cornerRadius(12)
-//            }
-//            .padding(.horizontal)
 
             // Write NFC Button
             Button(action: { viewModel.startNFCWriting() }) {
                 HStack {
-                    Image(systemName: "nfc")
+                    Image(systemName: "wave.3.right.circle")
                     Text("Write to NFC Tag")
                 }
                 .foregroundColor(.white)
@@ -111,4 +118,20 @@ struct QRAndNFCView: View {
 
 #Preview {
     QRAndNFCView()
+}
+
+
+
+
+extension UITextView {
+    open override var backgroundColor: UIColor? {
+        get { .clear }
+        set { }
+    }
+}
+
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
