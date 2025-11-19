@@ -56,4 +56,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Barcode scanner
+    implementation(libs.zxing.android.embedded)
+    implementation (libs.zxing.core)
 }
