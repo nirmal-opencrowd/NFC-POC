@@ -19,7 +19,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
 import com.example.nfcsample.service.PaymentHostApduService
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -34,7 +33,6 @@ class NFCDataActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nfc_data)
-        enableEdgeToEdge()
 
         val nfcDataEditText = findViewById<EditText>(R.id.nfcDataEditText)
         val writeNFCBtn = findViewById<Button>(R.id.writeDataToNFCTagBtn)
