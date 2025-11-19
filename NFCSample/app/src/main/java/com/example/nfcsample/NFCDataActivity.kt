@@ -50,8 +50,9 @@ class NFCDataActivity : ComponentActivity() {
             if (dataToSendUrl.isNotBlank()) {
                 Log.d("Payment URL", dataToSendUrl)
                 onNewURLCreated(dataToSendUrl)
+                Toast.makeText(this, "Please hold the phone near the NFC Tag", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "Please enter or scan data first", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter or scan data first", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -111,13 +112,13 @@ class NFCDataActivity : ComponentActivity() {
 
                 if (!it.isWritable) {
                     Log.d("writeUrlToTag", "Tag is not writable")
-                    Toast.makeText(this, "Tag is not writable", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Tag is not writable", Toast.LENGTH_LONG).show()
                     return
                 }
 
                 if (ndefMessage.toByteArray().size > it.maxSize) {
                     Log.d("writeUrlToTag", "URL is too large for this tag")
-                    Toast.makeText(this, "URL is too large for this tag", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "URL is too large for this tag", Toast.LENGTH_LONG).show()
                     return
                 }
 
@@ -128,7 +129,7 @@ class NFCDataActivity : ComponentActivity() {
                 Toast.makeText(this, "URL written successfully!", Toast.LENGTH_LONG).show()
             } ?: run {
                 Log.e("Error writeUrlToTag", "Tag does not support NDEF")
-                Toast.makeText(this, "Tag does not support NDEF", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tag does not support NDEF", Toast.LENGTH_LONG).show()
             }
 
         } catch (e: TagLostException) {
