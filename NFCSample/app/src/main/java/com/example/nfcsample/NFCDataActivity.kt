@@ -19,6 +19,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import com.example.nfcsample.service.PaymentHostApduService
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import java.io.IOException
@@ -49,7 +50,10 @@ class NFCDataActivity : ComponentActivity() {
             val dataToSendUrl = uriEditText.text.toString().trim()
             if (dataToSendUrl.isNotBlank()) {
                 Log.d("Payment URL", dataToSendUrl)
+
                 onNewURLCreated(dataToSendUrl)
+                prepareDataForTransfer()
+
                 Toast.makeText(this, "Please hold the phone near the NFC Tag", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this, "Please enter or scan data first", Toast.LENGTH_LONG).show()
@@ -194,6 +198,20 @@ class NFCDataActivity : ComponentActivity() {
 
     fun onNewURLCreated(url: String) {
         pendingURL = url
+    }
+
+    private fun prepareDataForTransfer() {
+        // Prepare merchant data
+        val uriEditText = findViewById<EditText>(R.id.uriStringEditText)
+        val dataToSendUrl = uriEditText.text.toString().trim()
+
+        val data = PaymentHostApduService.MerchantData(
+            uuid = dataToSendUrl
+        )
+        PaymentHostApduService.merchantData = data
+
+        Log.d("data", "Data ready! Bring consumer phone close to transfer:\n\n" + "uuid: ${data.uuid}\n")
+        Toast.makeText(applicationContext, "Hold consumer phone near this device", Toast.LENGTH_LONG).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
