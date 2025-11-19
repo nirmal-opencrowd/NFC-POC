@@ -44,7 +44,7 @@ struct QRAndNFCView: View {
                             }
                         }
             }
-            .frame(height: 100)
+            .frame(height: 150)
             .background(Color(.secondarySystemBackground))
             .cornerRadius(12)
             .padding(.horizontal, 20)
