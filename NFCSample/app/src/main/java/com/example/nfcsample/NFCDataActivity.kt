@@ -19,6 +19,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.example.nfcsample.service.PaymentHostApduService
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -37,6 +40,8 @@ class NFCDataActivity : ComponentActivity() {
         val nfcDataEditText = findViewById<EditText>(R.id.nfcDataEditText)
         val writeNFCBtn = findViewById<Button>(R.id.writeDataToNFCTagBtn)
         val sendNFCBtn = findViewById<Button>(R.id.sendDataViaNFCBtn)
+
+        handleSystemBarsInsets()
 
         nfcDataEditText.onRightDrawableClicked {
             IntentIntegrator(this)
@@ -223,6 +228,21 @@ class NFCDataActivity : ComponentActivity() {
 
         Log.d("data", "Data ready! Bring consumer phone close to transfer:\n\n" + "uuid: ${data.uuid}\n")
         Toast.makeText(applicationContext, "Hold consumer phone near this device", Toast.LENGTH_LONG).show()
+    }
+
+    private fun handleSystemBarsInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.nfcDataLLContainer)) { v, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            v.updatePadding(
+                left = bars.left,
+                top = bars.top,
+                right = bars.right,
+                bottom = bars.bottom
+            )
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
